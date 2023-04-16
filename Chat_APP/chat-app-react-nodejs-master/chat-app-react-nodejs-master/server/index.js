@@ -12,6 +12,7 @@ app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URL, {
+    dbname:"CourtRoom",
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -37,6 +38,7 @@ const io = socket(server, {
 
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
+  console.log(socket.id)
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);

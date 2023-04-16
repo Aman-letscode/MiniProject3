@@ -17,10 +17,12 @@ export default function Register() {
     theme: "dark",
   };
   const [values, setValues] = useState({
-    username: "",
-    email: "",
+    userId: "",
+    firstname:"",
+    lastname:"",
+    role:"",
     password: "",
-    confirmPassword: "",
+    cpassword: "",
   });
 
   useEffect(() => {
@@ -34,14 +36,14 @@ export default function Register() {
   };
 
   const handleValidation = () => {
-    const { password, confirmPassword, username, email } = values;
-    if (password !== confirmPassword) {
+    const { password, cpassword, userId } = values;
+    if (password !== cpassword) {
       toast.error(
         "Password and confirm password should be same.",
         toastOptions
       );
       return false;
-    } else if (username.length < 3) {
+    } else if (userId.length < 3) {
       toast.error(
         "Username should be greater than 3 characters.",
         toastOptions
@@ -53,10 +55,7 @@ export default function Register() {
         toastOptions
       );
       return false;
-    } else if (email === "") {
-      toast.error("Email is required.", toastOptions);
-      return false;
-    }
+    } 
 
     return true;
   };
@@ -64,10 +63,10 @@ export default function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { email, username, password } = values;
+      const { userId, firstname,lastname,role, password } = values;
       const { data } = await axios.post(registerRoute, {
-        username,
-        email,
+        userId,
+        firstname,lastname,role,
         password,
       });
 
@@ -79,8 +78,9 @@ export default function Register() {
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
         );
-        navigate("/");
+        navigate("/chat");
       }
+      navigate("/chat");
     }
   };
 
@@ -95,13 +95,26 @@ export default function Register() {
           <input
             type="text"
             placeholder="Username"
-            name="username"
+            name="userId"
             onChange={(e) => handleChange(e)}
           />
           <input
-            type="email"
-            placeholder="Email"
-            name="email"
+            type="text"
+            placeholder="Firstname"
+            name="firstname"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="Lastname"
+            name="lastname"
+            onChange={(e) => handleChange(e)}
+          />
+          
+          <input
+            type="text"
+            placeholder="Role"
+            name="role"
             onChange={(e) => handleChange(e)}
           />
           <input
@@ -113,7 +126,7 @@ export default function Register() {
           <input
             type="password"
             placeholder="Confirm Password"
-            name="confirmPassword"
+            name="cpassword"
             onChange={(e) => handleChange(e)}
           />
           <button type="submit">Create User</button>

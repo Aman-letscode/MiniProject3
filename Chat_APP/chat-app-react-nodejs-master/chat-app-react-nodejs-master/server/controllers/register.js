@@ -15,8 +15,8 @@ class Register{
     const role = req.body.role;
     // const dateofbirth = req.body.DOB;
 
-    const user = await User.findOne({ userId: userId }).lean();
-
+    const user = await User.findOne({ user_id: userId }).lean();
+console.log(user);
     if (user) {
       res.json({ status: "failed", message: "User Already Exist!!" });
       
@@ -36,13 +36,13 @@ class Register{
             });
             await doc.save();
             const saved = await User.findOne({ user_id: userId });
-            
+            const user = saved;
             if(saved){
 
               res.json({
                 status: "success",
                 message: "Registration Successful",
-                
+                user
               });
             }
             else{
@@ -88,6 +88,7 @@ class Register{
           res.status(201).json({
             status: "success",
             message: "Login Successful",
+            user
           });
         } else {
           console.log("Login Unsuccessful");
@@ -103,7 +104,7 @@ class Register{
         res.json({ status: "failed", message: "All feilds are required" });
       }
     } else {
-      console.log("User not found! Please registe");
+      console.log("User not found! Please register");
       res.json({
         status: "failed",
         message: "User not found! Please register",

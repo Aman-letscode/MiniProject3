@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 
-const msgSchema = new mongoose.Schema({
-    msg_id: {
+const UserSchema = new mongoose.Schema({
+    firstname: {
         type:String,
         required:[true,"can't be blank"],
         trim: true
     },
-    token: {
+    lastname: {
         type:String,
         required: false,
         default: null,
@@ -15,25 +15,27 @@ const msgSchema = new mongoose.Schema({
     },
     user_id: {
         type:String,
-        required: true,
+        required: false,
         default: null,
         trim: true
     },
-    case_id:{
+    password: {
         type:String,
         required: true,
-        default: "A",
+        trim: true
     },
-    
     role:{
         type: String,
         enum: ['lawyer','judge'],
         default: 'lawyer',
         // required:true
     }
-},
-{timestamps:true})
+    // ,
+    // token: {
+    //     type: String
+    // }
+})
 
-const msgModel =  mongoose.model('msg',msgSchema);
+const userModel =  mongoose.model('user',UserSchema);
 
-module.exports = msgModel;
+module.exports = userModel;

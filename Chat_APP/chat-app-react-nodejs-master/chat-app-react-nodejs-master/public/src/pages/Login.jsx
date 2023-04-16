@@ -9,7 +9,7 @@ import { loginRoute } from "../utils/APIRoutes";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [values, setValues] = useState({ username: "", password: "" });
+  const [values, setValues] = useState({ userId: "", password: "" });
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -28,8 +28,8 @@ export default function Login() {
   };
 
   const validateForm = () => {
-    const { username, password } = values;
-    if (username === "") {
+    const { userId, password } = values;
+    if (userId === "") {
       toast.error("Email and Password is required.", toastOptions);
       return false;
     } else if (password === "") {
@@ -42,9 +42,9 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      const { username, password } = values;
+      const { userId, password } = values;
       const { data } = await axios.post(loginRoute, {
-        username,
+        userId,
         password,
       });
       if (data.status === false) {
@@ -72,7 +72,7 @@ export default function Login() {
           <input
             type="text"
             placeholder="Username"
-            name="username"
+            name="userId"
             onChange={(e) => handleChange(e)}
             min="3"
           />

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat App</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        #chat-container {
+    border: 1px solid black;
+    height: 500px;
+    width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+
+#message-container {
+    height: 80%;
+    overflow: scroll;
+}
+
+#message-list {
+    margin-bottom: 10px;
+}
+
+#message-list .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+#message-form {
+    display: flex;
+}
+
+#message-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+#message-form button {
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+#message-form button:hover {
+    background-color: #3e8e41;
+}
+
+    </style>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="/siofu/client.js"></script>
+</head>
+<body>
+	<div id="chat-container">
+		<div id="message-container">
+			<div id="message-list">
+				<!-- messages will be displayed here -->
+			</div>
+		</div>
+		<form id="message-form">
+			<input type="text" id="message-input" placeholder="Type your message...">
+			<button type="submit">Send</button>
+		</form>
+	</div>
+    
+	<!-- <script src="scrip"> -->
+	<script>
+        const socket = io(); // assuming socket.io is included in the HTML file
+        socket.on("connect",()=>{
+            console.log(socket.id);
+        })
+const messageContainer = document.getElementById('message-list');
+const messageForm = document.getElementById('message-form');
+const messageInput = document.getElementById('message-input');
+
+messageForm.addEventListener('submit', (event) => {
+	event.preventDefault(); // prevent the form from submitting and refreshing the page
+	const message = messageInput.value;
+	if (message) {
+		socket.emit('chatMessage', message); // send the message to the server
+		messageInput.value = ''; // clear the input field
+	}
+});
+
+socket.on('chatMessage', (message) => {
+	const messageElement = document.createElement('div');
+	messageElement.classList.add('message');
+	messageElement.innerText = message;
+	messageContainer.appendChild(messageElement);
+	messageContainer.scrollTop = messageContainer.scrollHeight; // scroll to the bottom of the message container
+});
+const listener = (eventName, ...args) =>{
+            console.log(eventName, args);
+        }
+
+        socket.onAny(listener);
+    </script>
+</body>
+</html>

@@ -2,33 +2,35 @@ const mongoose = require('mongoose')
 
 
 const caseSchema = new mongoose.Schema({
-    msg_id: {
+    case_id: {
         type:String,
         required:[true,"can't be blank"],
         trim: true
     },
-    token: {
-        type:String,
-        required: false,
-        default: null,
-        trim: true
+    status:{
+        type: String,
+        enum: ['closed','active']
     },
-    user_id: {
+    
+    judge_id: {
         type:String,
         required: false,
         default: null,
         trim: true
     },
     
-    role:{
-        type: String,
-        enum: ['lawyer','judge'],
-        default: 'lawyer',
-        // required:true
+    lawyer_id:{
+        type: Array,
+        
+        required:true
+    },
+    last_active:{
+        type: Date,
+        required:false
     }
 },
 {timestamps:true})
 
-const userModel =  mongoose.model('user',UserSchema);
+const caseModel =  mongoose.model('case',caseSchema);
 
-module.exports = userModel;
+module.exports = caseModel;
